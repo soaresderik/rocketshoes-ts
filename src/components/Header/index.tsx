@@ -8,7 +8,7 @@ import { MdShoppingBasket } from "react-icons/md";
 import { useStore } from "../../store";
 
 const Header = observer(() => {
-  const { cart } = useStore();
+  const { cartStore } = useStore();
   return (
     <Container>
       <Link to="/">
@@ -18,7 +18,7 @@ const Header = observer(() => {
       <Cart to="/cart">
         <div>
           <strong>Meu carrinho</strong>
-          <span>{cart.cart.length} itens</span>
+          <span>{cartStore.cart.length} itens</span>
         </div>
         <MdShoppingBasket size={36} color="#FFF" />
       </Cart>

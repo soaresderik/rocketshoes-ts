@@ -6,7 +6,7 @@ import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 
 const Home = observer(() => {
-  const { fetchProducts, products, addProduct, amount } = useStore().cart;
+  const { fetchProducts, products, addProduct, amount } = useStore().cartStore;
 
   useEffect(() => {
     fetchProducts();

@@ -9,7 +9,7 @@ import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
 
 const Cart = observer(() => {
-  const { cart } = useStore();
+  const { cartStore } = useStore();
   return (
     <Container>
       <ProductTable>
@@ -23,7 +23,7 @@ const Cart = observer(() => {
           </tr>
         </thead>
         <tbody>
-          {cart.cart.map(i => (
+          {cartStore.cart.map(i => (
             <tr key={i.id}>
               <td>
                 <img src={i.image} alt={i.title} />
@@ -34,11 +34,11 @@ const Cart = observer(() => {
               </td>
               <td>
                 <div>
-                  <button onClick={() => cart.decrement(i)}>
+                  <button onClick={() => cartStore.decrement(i)}>
                     <MdRemoveCircleOutline size={20} color="#7159c1" />
                   </button>
                   <input type="number" readOnly value={i.amount} />
-                  <button onClick={() => cart.increment(i)}>
+                  <button onClick={() => cartStore.increment(i)}>
                     <MdAddCircleOutline size={20} color="#7159c1" />
                   </button>
                 </div>
@@ -47,7 +47,7 @@ const Cart = observer(() => {
                 <strong>{i.subtotal}</strong>
               </td>
               <td>
-                <button onClick={() => cart.removeFromCart(i.id)}>
+                <button onClick={() => cartStore.removeFromCart(i.id)}>
                   <MdDelete size={20} color="#7159c1" />
                 </button>
               </td>
@@ -61,7 +61,7 @@ const Cart = observer(() => {
 
         <Total>
           <span>TOTAL</span>
-          <strong>{cart.total}</strong>
+          <strong>{cartStore.total}</strong>
         </Total>
       </footer>
     </Container>
