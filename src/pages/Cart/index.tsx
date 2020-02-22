@@ -5,8 +5,11 @@ import {
   MdAddCircleOutline,
   MdDelete
 } from "react-icons/md";
+import { useStore } from "../../store";
+import { observer } from "mobx-react-lite";
 
-const Cart = () => {
+const Cart = observer(() => {
+  const { cart } = useStore();
   return (
     <Container>
       <ProductTable>
@@ -20,39 +23,36 @@ const Cart = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <img
-                src="https://static.netshoes.com.br/produtos/tenis-de-caminhada-leve-confortavel/06/E74-0492-006/E74-0492-006_zoom1.jpg"
-                alt="Tênis"
-              />
-            </td>
-            <td>
-              <strong>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              </strong>
-              <span>R$129,90</span>
-            </td>
-            <td>
-              <div>
-                <button>
-                  <MdRemoveCircleOutline size={20} color="#7159c1" />
+          {cart.cart.map(i => (
+            <tr key={i.id}>
+              <td>
+                <img src={i.image} alt={i.title} />
+              </td>
+              <td>
+                <strong>{i.title}</strong>
+                <span>{i.formatedPrice}</span>
+              </td>
+              <td>
+                <div>
+                  <button onClick={() => cart.decrement(i)}>
+                    <MdRemoveCircleOutline size={20} color="#7159c1" />
+                  </button>
+                  <input type="number" readOnly value={i.amount} />
+                  <button onClick={() => cart.increment(i)}>
+                    <MdAddCircleOutline size={20} color="#7159c1" />
+                  </button>
+                </div>
+              </td>
+              <td>
+                <strong>{i.subtotal}</strong>
+              </td>
+              <td>
+                <button onClick={() => cart.removeFromCart(i.id)}>
+                  <MdDelete size={20} color="#7159c1" />
                 </button>
-                <input type="number" readOnly value={2} />
-                <button>
-                  <MdAddCircleOutline size={20} color="#7159c1" />
-                </button>
-              </div>
-            </td>
-            <td>
-              <strong>R$259,80</strong>
-            </td>
-            <td>
-              <button>
-                <MdDelete size={20} color="#7159c1" />
-              </button>
-            </td>
-          </tr>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </ProductTable>
 
@@ -61,11 +61,11 @@ const Cart = () => {
 
         <Total>
           <span>TOTAL</span>
-          <strong>R$ 1280,98</strong>
+          <strong>{cart.total}</strong>
         </Total>
       </footer>
     </Container>
   );
-};
+});
 
 export default Cart;

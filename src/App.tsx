@@ -6,7 +6,7 @@ import Routes from "./routes";
 
 import Header from "./components/Header";
 
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
       <Header />
@@ -14,6 +14,6 @@ function App() {
       <GlobalStyles />
     </BrowserRouter>
   );
-}
+};
 
 export default App;
