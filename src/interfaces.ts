@@ -7,3 +7,8 @@ export interface IProduct {
   formatedPrice?: string;
   subtotal?: string;
 }
+
+export interface IStock {
+  id: number;
+  amount: number;
+}

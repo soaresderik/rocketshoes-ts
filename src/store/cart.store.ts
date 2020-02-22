@@ -1,22 +1,25 @@
-import { IProduct } from "../interfaces";
-import { observable, computed } from "mobx";
+import { IProduct, IStock } from "../interfaces";
+import { observable, computed, action } from "mobx";
 import { formatPrice } from "../utils/format";
 import api from "../services/api";
+import { toast } from "react-toastify";
 
 export default class CartStore {
   @observable cart: IProduct[] = [];
   @observable products: IProduct[] = [];
 
-  public addProduct = (product: IProduct) => {
-    const finded = this.cart.findIndex(i => i.id === product.id);
+  public addProduct = async (product: IProduct) => {
+    const find = this.cart.find(i => i.id === product.id);
 
-    if (finded >= 0) this.cart[finded].amount += 1;
-    else
+    if (find) {
+      await this.increment(find);
+    } else {
       this.cart.push({
         ...product,
         amount: 1,
         subtotal: formatPrice(product.price * 1)
       });
+    }
   };
 
   public fetchProducts = async () => {
@@ -31,18 +34,20 @@ export default class CartStore {
     this.cart = this.cart.filter(i => i.id !== id);
   };
 
-  public increment = (product: IProduct) => {
+  @action
+  public increment = async (product: IProduct) => {
+    const { data } = await api.get<IStock>(`stock/${product.id}`);
+
+    if (product.amount >= data.amount) {
+      toast.error("Quantidade maior que o stock");
+      return;
+    }
+
     product.amount += 1;
-    this.updatePrices(product);
   };
 
   public decrement = (product: IProduct) => {
     product.amount = product.amount > 1 ? (product.amount -= 1) : 1;
-    this.updatePrices(product);
-  };
-
-  public updatePrices = (product: IProduct) => {
-    product.subtotal = formatPrice(product.price * product.amount);
   };
 
   @computed
